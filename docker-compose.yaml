@@ -21,6 +21,8 @@ services:
       - "AMQP_URL='amqp://rabbitmq'"
       - "AVG_EXCHANGE=tempMean"
       - "AVG_QUEUE=tempMeanClient"
+    ports:
+      - 8080:80
 
   producer:
     build: producer/
