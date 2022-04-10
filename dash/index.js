@@ -48,9 +48,11 @@ server.use(
   server.get("/update", (req, res) => {
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
-    const updateTempMean = (tempMean) =>
+    const updateTempMean = (tempMean, event = "updateTempMean") =>
       res.write(
-        `event: updateTempMean\ndata: ${JSON.stringify({ tempMean })}\n\n`
+        `event: ${event}\ndata: ${JSON.stringify(
+          event === "updateTempMean" ? { tempMean } : tempMean
+        )}\n\n`
       );
 
     updateTempMean(tempMean);
@@ -62,6 +64,7 @@ server.use(
       },
       error: (err) => {
         console.error("ERROR ON OBSERVABLE", err);
+        updateTempMean(err.stack, "error");
       },
     });
   });
