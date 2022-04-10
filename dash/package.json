@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "handlebars": "^4.7.7",
+    "restify": "^8.6.1",
+    "restify-render-middleware": "^2.0.3",
+    "rxjs": "^7.5.5"
+  }
+}

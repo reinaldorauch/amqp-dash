@@ -1,0 +1,46 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <h1>Dashboard</h1>
+    <h2>AVG Temp</h2>
+    <p>Status: <span id="status">connecting</span></p>
+    <p id="avgTemp">{{ tempMean }}</p>
+
+    <script type="text/javascript">
+      (function () {
+        'use strict';
+
+        const $ = (s, e = document) => e.querySelector(s);
+        const statusEl = $('#status');
+        const avgTempEl = $('#avgTemp');
+        const updateStatus = (msg) => { statusEl.textContent = msg };
+        const updateAvgTemp = (temp) => { avgTempEl.textContent = temp.toFixed(5) + 'ºC' };
+
+        const eventStream = new EventSource('/update');
+
+        eventStream.addEventListener('updateTempMean', (msg) => {
+          console.log('Received new mean:', msg.data);
+
+          const { tempMean } = JSON.parse(msg.data);
+
+          updateAvgTemp(tempMean);
+        });
+
+        eventStream.addEventListener('close', () => {
+          updateStatus('CLOSED')
+        });
+
+        eventStream.addEventListener('error', (err) => {
+          updateStatus('Error: ' + err.message)
+        });
+
+        updateStatus('CONNECTED');
+      })();
+    </script>
+  </body>
+</html>

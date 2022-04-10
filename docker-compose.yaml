@@ -1,0 +1,29 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  aggregator:
+    build: aggregator/
+    environment:
+      - "EXCHANGE=meaner"
+      - "QUEUE=meanInput"
+      - "AVG_EXCHANGE=tempMean"
+      - "AMQP_URL='amqp://rabbitmq'"
+
+  dash:
+    build: dash/
+    environment:
+      - "PORT=80"
+      - "AMQP_URL='amqp://rabbitmq'"
+      - "AVG_EXCHANGE=tempMean"
+      - "AVG_QUEUE=tempMeanClient"
+
+  producer:
+    build: producer/
+    environment:
+      - "AMQP_URL='amqp://rabbitmq'"
+      - "EXCHANGE=meaner"
