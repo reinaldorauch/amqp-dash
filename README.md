@@ -6,7 +6,14 @@ webpage via SSE
 
 ## How to run (with docker compose)
 
+```bash
 (For each folder) npm i
+```
+
+then
+
+```bash
 docker compose up
+```
 
 Then you can access the html page at http://localhost:8080
